@@ -6,10 +6,25 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 16:00:34 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/02/26 18:20:20 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/02/27 17:07:35 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philosophers.h"
+
+void	ft_exit(char *reason)
+{
+	printf("%s\n", reason);
+	exit (0);
+}
+int	ft_isdigit(int character)
+{
+	if (character < '0' || character > '9')
+	{
+		return (0);
+	}
+	return (1);
+}
 
 long	ft_atoi( const char *theString)
 {
@@ -43,17 +58,17 @@ int	check_args(int argc, char **arg)
 	int	i;
 
 	i = 1;
-	while (i <= argc)
+	while (i < argc)
 	{
 		if (i != 5)
 		{
 			if (ft_atoi(arg[i]) <= 0)
-				return (0);
+				ft_exit("Arguments are invalid");
 		}
-		if (i == 5)
+		else if (i == 5)
 		{
 			if (ft_atoi(arg[i]) < 0)
-				return (0);
+				ft_exit("Arguments are invalid");
 		}
 		i++;
 	}
