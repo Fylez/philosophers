@@ -6,12 +6,32 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:52:45 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/02/28 18:27:10 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/02/28 19:48:44 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+
+pickfork()
+{
+	pthread_mutex_lock
+	say pick left fork
+	
+}
+
+
+void routine()
+{
+
+	while(!finish)
+	{
+		think
+		pickfork
+		eat and reset timer
+		sleep
+	}
+}
 
 void	*test(void *philo)
 {
@@ -22,6 +42,8 @@ void	*test(void *philo)
 	printf("test3\n");
 	pthread_mutex_unlock(&((t_philo *)philo)->table->lock);
 }
+
+
 void	init_threads(int nphilos, t_philo *philos, t_table lock)
 {
 	int i;
