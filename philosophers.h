@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:20:19 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/02/28 18:11:57 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:52:23 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 # include <pthread.h>
 
 typedef struct s_table {
-	pthread_mutex_t lock;
+	pthread_mutex_t *fork;
+	pthread_mutex_t text;
 }	t_table;
 
 typedef struct s_philo {
@@ -31,5 +32,6 @@ typedef struct s_philo {
 long	ft_atoi( const char *theString);
 void	ft_exit(char *reason);
 int		check_args(int argc, char **arg);
+void	routine(t_table table);
 
 #endif
