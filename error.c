@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 16:00:34 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/02/27 17:07:35 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:57:08 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	ft_isdigit(int character)
 	return (1);
 }
 
-long	ft_atoi( const char *theString)
+int	ft_atoi( const char *theString)
 {
-	long			i;
-	long			result;
+	int			i;
+	int			result;
 	int				neg;
 
 	i = 0;
