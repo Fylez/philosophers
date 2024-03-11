@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:20:19 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/08 19:43:16 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:12:29 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 typedef struct s_table {
 	pthread_mutex_t *fork;
 	pthread_mutex_t text;
+	pthread_mutex_t stop;
 	struct timeval start_time;
 	int	nphilos;
 	int	tdie;
@@ -43,7 +44,8 @@ int		ft_atoi( const char *theString);
 void	ft_exit(char *reason);
 int		check_args(int argc, char **arg);
 void	*routine(void *philo);
-long	get_time_elapsed(struct timeval p_time)
+long	get_time_elapsed(struct timeval p_time);
+void	ft_print(char *reason, t_philo *philo);
 
 
 #endif

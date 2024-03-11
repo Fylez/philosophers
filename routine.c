@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:36:30 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/08 19:53:17 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/11 20:14:30 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,24 @@ void	ft_sleep(int time)
 
 void	ft_print(char *reason, t_philo *philo)
 {
-	pthread_mutex_lock(&philo->table->text);
-	printf("%ld  ", get_time_elapsed(philo->table->start_time));
-	printf("Philosophers %d %s\n", philo->index, reason);
-	pthread_mutex_unlock(&philo->table->text);
+	pthread_mutex_lock (&philo->table->stop);
+	if (((t_philo *)philo)->table->tostop == 0)
+	{
+		pthread_mutex_lock(&philo->table->text);
+		printf("%ld ", get_time_elapsed(philo->table->start_time));
+		printf("%d %s\n", philo->index, reason);
+		pthread_mutex_unlock(&philo->table->text);
+	}
+	pthread_mutex_unlock (&philo->table->stop);
+
 }
 
 void	eat(t_philo *philo)
 {
-	if(philo->table->tostop == 0)
-	{
-		ft_print("is eating", philo);
-		philo->teaten++;
-		gettimeofday(&philo->last_time, 0);
-		ft_sleep(philo->table->teat);
-	}
+	ft_print("is eating", philo);
+	philo->teaten++;
+	gettimeofday(&philo->last_time, 0);
+	ft_sleep(philo->table->teat);
 }
 
 void	psleep(t_philo *philo)
@@ -74,10 +77,18 @@ void	pickfork(t_philo *philo)
 	ft_print("has put a down fork", philo);
 }
 
-void	*routine(void *philo)
+void *routine(void *philo)
 {
-	while ((((t_philo *)philo)->teaten != ((t_philo *)philo)->table->aeat) && ((t_philo *)philo)->table->tostop == 0)
+	int	stop;
+
+	stop = 0;
+	while ((((t_philo *)philo)->teaten
+			!= ((t_philo *)philo)->table->aeat) && stop == 0)
 	{
+		pthread_mutex_lock (&((t_philo *)philo)->table->stop);
+		if (((t_philo *)philo)->table->tostop == 1)
+			stop = 1;
+		pthread_mutex_unlock (&((t_philo *)philo)->table->stop);
 		ft_print("is thinking", philo);
 		pickfork((t_philo *)philo);
 		psleep((t_philo *)philo);
