@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:36:30 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/12 18:00:58 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/12 19:48:40 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 
 void	ft_sleep(int time)
 {
-	int	i;
-
-	i = 0;
-	while (i < (time * 1000))
-	{
-		usleep(10);
-		i = i + 10;
-	}
+	usleep(time * 1000);
 }
 
 void	ft_print(char *reason, t_philo *philo)
@@ -54,6 +47,7 @@ void	psleep(t_philo *philo)
 
 void	pickfork(t_philo *philo)
 {
+	ft_print("is waiting for a fork", philo);
 	if (philo->index == (philo->table->nphilos - 1))
 		pthread_mutex_lock (&philo->table->fork[0]);
 	else
@@ -64,17 +58,18 @@ void	pickfork(t_philo *philo)
 	else
 		pthread_mutex_lock (&philo->table->fork[(philo->index + 1)]);
 	ft_print("has taken a fork", philo);
+
 	eat(philo);
+
 	if (philo->index == (philo->table->nphilos - 1))
 		pthread_mutex_unlock (&philo->table->fork[0]);
 	else
 		pthread_mutex_unlock (&philo->table->fork[philo->index]);
-	ft_print("has put down a fork", philo);
+
 	if (philo->index == (philo->table->nphilos - 1))
 		pthread_mutex_unlock (&philo->table->fork[philo->index]);
 	else
 		pthread_mutex_unlock (&philo->table->fork[(philo->index + 1)]);
-	ft_print("has put a down fork", philo);
 }
 
 void *routine(void *philo)
@@ -82,6 +77,8 @@ void *routine(void *philo)
 	int	stop;
 
 	stop = 0;
+	if (((t_philo *)philo)->index % 2 == 0)
+		ft_sleep(((t_philo *)philo)->table->teat / 10);
 	while ((((t_philo *)philo)->teaten
 			!= ((t_philo *)philo)->table->aeat) && stop == 0)
 	{

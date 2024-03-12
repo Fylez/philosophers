@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:52:45 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/12 17:58:32 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/12 19:58:28 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	init_threads(int nphilos, t_philo *philos, t_table *table)
 		philos[i].index = i;
 		philos[i].teaten = 0;
 		philos[i].last_time = table->start_time;
+		pthread_mutex_init(&philos[i].leat, NULL);
 		pthread_create(&(philos[i].philo), NULL, routine, &philos[i]);
 		i++;
 	}
