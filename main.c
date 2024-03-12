@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:52:45 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/11 20:12:14 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/12 17:58:32 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,29 @@ long	get_time_elapsed(struct timeval p_time)
 void	check_death(int nphilos, t_philo *philos)
 {
 	int	i;
-	int	isdead;
+	int	stop;
 
-	isdead = 0;
-	while (isdead == 0)
+	stop = 0;
+	while (stop == 0)
 	{
 		i = 0;
-		while (i < nphilos && isdead == 0)
+		while (i < nphilos && stop == 0)
 		{
-			if (get_time_elapsed(philos[i].last_time) > philos[i].table->tdie)
+			pthread_mutex_lock (&philos[i].table->stop);
+			if (philos[i].table->pdone == philos[i].table->nphilos)
+				stop = 1;
+			pthread_mutex_unlock (&philos[i].table->stop);
+			pthread_mutex_lock (&philos[i].leat);
+			if ((get_time_elapsed(philos[i].last_time) > philos[i].table->tdie)
+				&& stop == 0)
 			{
-				isdead = 1;
+				stop = 1;
 				ft_print("died", &philos[i]);
 				pthread_mutex_lock (&philos[i].table->stop);
 				philos[i].table->tostop = 1;
 				pthread_mutex_unlock (&philos[i].table->stop);
 			}
+			pthread_mutex_unlock (&philos[i].leat);
 			i++;
 		}
 	}
@@ -113,5 +120,6 @@ int	main(int argc, char *argv[])
 	table.teat = ft_atoi(argv[3]);
 	table.tsleep = ft_atoi(argv[4]);
 	table.tostop = 0;
+	table.pdone = 0;
 	init_philos(&table);
 }

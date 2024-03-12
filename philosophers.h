@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:20:19 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/11 19:12:29 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/12 17:35:27 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,14 @@ typedef struct s_table {
 	int	tsleep;
 	int aeat;
 	int tostop;
+	int pdone;
 }	t_table;
 
 typedef struct s_philo {
 	int index;
 	t_table *table;
 	pthread_t philo;
+	pthread_mutex_t leat;
 	int teaten;
 	struct timeval last_time;
 }	t_philo;

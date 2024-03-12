@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:36:30 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/11 20:14:30 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/12 18:00:58 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_sleep(int time)
 	int	i;
 
 	i = 0;
-	while (i < time)
+	while (i < (time * 1000))
 	{
 		usleep(10);
 		i = i + 10;
@@ -29,10 +29,8 @@ void	ft_print(char *reason, t_philo *philo)
 	pthread_mutex_lock (&philo->table->stop);
 	if (((t_philo *)philo)->table->tostop == 0)
 	{
-		pthread_mutex_lock(&philo->table->text);
 		printf("%ld ", get_time_elapsed(philo->table->start_time));
 		printf("%d %s\n", philo->index, reason);
-		pthread_mutex_unlock(&philo->table->text);
 	}
 	pthread_mutex_unlock (&philo->table->stop);
 
@@ -42,7 +40,9 @@ void	eat(t_philo *philo)
 {
 	ft_print("is eating", philo);
 	philo->teaten++;
+	pthread_mutex_lock (&philo->leat);
 	gettimeofday(&philo->last_time, 0);
+	pthread_mutex_unlock (&philo->leat);
 	ft_sleep(philo->table->teat);
 }
 
@@ -93,5 +93,8 @@ void *routine(void *philo)
 		pickfork((t_philo *)philo);
 		psleep((t_philo *)philo);
 	}
+	pthread_mutex_lock (&((t_philo *)philo)->table->stop);
+	((t_philo *)philo)->table->pdone++;
+	pthread_mutex_unlock (&((t_philo *)philo)->table->stop);
 }
 
