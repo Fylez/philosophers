@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:52:45 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/12 19:58:28 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/14 19:22:29 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ void	check_death(int nphilos, t_philo *philos)
 		{
 			pthread_mutex_lock (&philos[i].table->stop);
 			if (philos[i].table->pdone == philos[i].table->nphilos)
+			{
+				philos[i].table->tostop = 1;
 				stop = 1;
+			}
 			pthread_mutex_unlock (&philos[i].table->stop);
 			pthread_mutex_lock (&philos[i].leat);
 			if ((get_time_elapsed(philos[i].last_time) > philos[i].table->tdie)
@@ -50,6 +53,7 @@ void	check_death(int nphilos, t_philo *philos)
 			}
 			pthread_mutex_unlock (&philos[i].leat);
 			i++;
+			usleep(100);
 		}
 	}
 }
