@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:36:30 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/22 15:54:41 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:41:07 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 void	think(t_philo *philo)
 {
 	ft_print("is thinking", philo);
-	ft_sleep(philo->table, (philo->table->tdie
-			- (philo->table->tsleep + philo->table->teat)) / 10);
+	ft_sleep(philo->table, 1);
 }
 
 void	eat(t_philo *philo)
@@ -43,6 +42,12 @@ void	psleep(t_philo *philo)
 
 int	pickfork(t_philo *philo, int left, int right)
 {
+	if(philo->table->nphilos == 1)
+	{
+		ft_print("has taken a fork", philo);
+		ft_sleep(philo->table, philo->table->tdie);
+		return (0);
+	}
 	pthread_mutex_lock (&philo->table->fork[left]);
 	ft_print("has taken a fork", philo);
 	pthread_mutex_lock (&philo->table->fork[right]);

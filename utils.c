@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:38 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/22 16:00:41 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:37:27 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	checkstop(t_table *table)
 void	ft_sleep( t_table *table, int time)
 {
 	long	start_time;
-
 	start_time = get_time_elapsed(table->start_time);
 	while (get_time_elapsed(table->start_time) - start_time < time)
 		usleep(50);
