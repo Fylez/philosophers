@@ -6,21 +6,29 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:52:45 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/14 19:22:29 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 14:49:03 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-long	get_time_elapsed(struct timeval p_time)
+int	check_last_eat(t_philo philo)
 {
-	struct timeval	current_time;
-	long			time;
+	int	stop;
 
-	gettimeofday(&current_time, 0);
-	time = (current_time.tv_sec - p_time.tv_sec) * 1000;
-	time = time + ((current_time.tv_usec - p_time.tv_usec) / 1000);
-	return (time);
+	stop = 0;
+	pthread_mutex_lock (&philo.table->stop);
+	if ((get_time_elapsed(philo.last_time) > philo.table->tdie)
+		&& stop == 0)
+	{
+		stop = 1;
+		pthread_mutex_unlock (&philo.table->stop);
+		ft_print("died", &philo);
+		pthread_mutex_lock (&philo.table->stop);
+		philo.table->tostop = 1;
+	}
+	pthread_mutex_unlock (&philo.table->stop);
+	return (stop);
 }
 
 void	check_death(int nphilos, t_philo *philos)
@@ -41,17 +49,7 @@ void	check_death(int nphilos, t_philo *philos)
 				stop = 1;
 			}
 			pthread_mutex_unlock (&philos[i].table->stop);
-			pthread_mutex_lock (&philos[i].leat);
-			if ((get_time_elapsed(philos[i].last_time) > philos[i].table->tdie)
-				&& stop == 0)
-			{
-				stop = 1;
-				ft_print("died", &philos[i]);
-				pthread_mutex_lock (&philos[i].table->stop);
-				philos[i].table->tostop = 1;
-				pthread_mutex_unlock (&philos[i].table->stop);
-			}
-			pthread_mutex_unlock (&philos[i].leat);
+			stop = check_last_eat(philos[i]);
 			i++;
 			usleep(100);
 		}
@@ -70,10 +68,10 @@ void	init_threads(int nphilos, t_philo *philos, t_table *table)
 		philos[i].index = i;
 		philos[i].teaten = 0;
 		philos[i].last_time = table->start_time;
-		pthread_mutex_init(&philos[i].leat, NULL);
 		pthread_create(&(philos[i].philo), NULL, routine, &philos[i]);
 		i++;
 	}
+	i = 0;
 	check_death(nphilos, philos);
 	i = 0;
 	while (i < nphilos)
@@ -100,11 +98,6 @@ void	init_philos(t_table *table)
 	pthread_mutex_init(&table->stop, NULL);
 	init_threads(table->nphilos, philos, table);
 	i = 0;
-	/*while (i < table->nphilos)
-	{
-		free(&table->fork[i]);
-		i++;
-	}*/
 	free(table -> fork);
 	free(philos);
 }

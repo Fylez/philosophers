@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 16:00:34 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/08 16:57:08 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 14:52:30 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_exit(char *reason)
 	printf("%s\n", reason);
 	exit (0);
 }
+
 int	ft_isdigit(int character)
 {
 	if (character < '0' || character > '9')
@@ -30,7 +31,7 @@ int	ft_atoi( const char *theString)
 {
 	int			i;
 	int			result;
-	int				neg;
+	int			neg;
 
 	i = 0;
 	neg = 1;
@@ -51,7 +52,6 @@ int	ft_atoi( const char *theString)
 	}
 	return (result * neg);
 }
-
 
 int	check_args(int argc, char **arg)
 {
