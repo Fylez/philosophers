@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 14:37:38 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/22 14:39:39 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:00:41 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ int	checkstop(t_table *table)
 	return (returnv);
 }
 
-void	ft_sleep(int time)
+void	ft_sleep( t_table *table, int time)
 {
-	struct timeval	start_time;
+	long	start_time;
 
-	gettimeofday(&start_time, 0);
-	while (get_time_elapsed(start_time) < time)
-		usleep(25);
+	start_time = get_time_elapsed(table->start_time);
+	while (get_time_elapsed(table->start_time) - start_time < time)
+		usleep(50);
 }
 
 void	ft_print(char *reason, t_philo *philo)
@@ -50,5 +50,13 @@ void	ft_print(char *reason, t_philo *philo)
 		printf("%ld ", get_time_elapsed(philo->table->start_time));
 		printf("%d %s\n", philo->index, reason);
 	}
+	pthread_mutex_unlock (&philo->table->text);
+}
+
+void	ft_print_death(t_philo *philo)
+{
+	pthread_mutex_lock (&philo->table->text);
+	printf("%ld ", get_time_elapsed(philo->table->start_time));
+	printf("%d died\n", philo->index);
 	pthread_mutex_unlock (&philo->table->text);
 }

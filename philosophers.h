@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:20:19 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/22 14:52:34 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:00:45 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	*routine(void *philo);
 long	get_time_elapsed(struct timeval p_time);
 void	ft_print(char *reason, t_philo *philo);
 int		checkstop(t_table *table);
-void	ft_sleep(int time);
+void	ft_sleep( t_table *table, int time);
+void	ft_print_death(t_philo *philo);
 
 #endif

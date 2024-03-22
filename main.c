@@ -6,7 +6,7 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:52:45 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/22 14:49:03 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:06:28 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	check_last_eat(t_philo philo)
 		&& stop == 0)
 	{
 		stop = 1;
-		pthread_mutex_unlock (&philo.table->stop);
-		ft_print("died", &philo);
-		pthread_mutex_lock (&philo.table->stop);
 		philo.table->tostop = 1;
+		pthread_mutex_unlock (&philo.table->stop);
+		ft_print_death(&philo);
+		pthread_mutex_lock (&philo.table->stop);
 	}
 	pthread_mutex_unlock (&philo.table->stop);
 	return (stop);

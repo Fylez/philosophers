@@ -6,11 +6,18 @@
 /*   By: lzaengel <lzaengel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:36:30 by lzaengel          #+#    #+#             */
-/*   Updated: 2024/03/22 14:52:02 by lzaengel         ###   ########.fr       */
+/*   Updated: 2024/03/22 15:54:41 by lzaengel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+void	think(t_philo *philo)
+{
+	ft_print("is thinking", philo);
+	ft_sleep(philo->table, (philo->table->tdie
+			- (philo->table->tsleep + philo->table->teat)) / 10);
+}
 
 void	eat(t_philo *philo)
 {
@@ -21,7 +28,7 @@ void	eat(t_philo *philo)
 		pthread_mutex_lock (&philo->table->stop);
 		gettimeofday(&philo->last_time, 0);
 		pthread_mutex_unlock (&philo->table->stop);
-		ft_sleep(philo->table->teat);
+		ft_sleep(philo->table, philo->table->teat);
 	}
 }
 
@@ -30,7 +37,7 @@ void	psleep(t_philo *philo)
 	if (checkstop(philo->table) == 0)
 	{
 		ft_print("is sleeping", philo);
-		ft_sleep(philo->table->tsleep);
+		ft_sleep(philo->table, philo->table->tsleep);
 	}
 }
 
@@ -55,12 +62,13 @@ void	*routine(void *philo)
 	if (((t_philo *)philo)->index == ((t_philo *)philo)->table->nphilos - 1)
 		right = 0;
 	if (((t_philo *)philo)->index % 2 == 0)
-		ft_sleep(((t_philo *)philo)->table->teat - 10);
+		ft_sleep(((t_philo *)philo)->table,
+			((t_philo *)philo)->table->teat / 10);
 	while (checkstop(((t_philo *)philo)->table) == 0)
 	{
 		pickfork((t_philo *)philo, left, right);
 		psleep((t_philo *)philo);
-		ft_print("is thinking", philo);
+		think((t_philo *)philo);
 		if ((((t_philo *)philo)->teaten == ((t_philo *)philo)->table->aeat))
 		{
 			pthread_mutex_lock (&((t_philo *)philo)->table->stop);
